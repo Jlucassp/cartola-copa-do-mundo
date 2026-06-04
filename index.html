@@ -1,0 +1,1455 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Copa do Mundo 2026 · Cartola FC</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Teko:wght@500;600;700&family=Rajdhani:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      :root {
+        --black: #0a0a0a;
+        --white: #ffffff;
+        --gold: #c9a84c;
+        --gold-light: #e8c96a;
+        --gold-dark: #8c6a1a;
+        --gray: #1a1a1a;
+        --off-white: #f5f2ec;
+      }
+
+      body {
+        font-family: "Rajdhani", sans-serif;
+        background: var(--black);
+        color: var(--white);
+        overflow-x: hidden;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      /* ===== HERO ===== */
+      .hero-copa {
+        position: relative;
+        width: 100%;
+        min-height: 100vh;
+        overflow: hidden;
+
+        background-image: url("hero-img.png");
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+
+        display: flex;
+        align-items: center;
+      }
+
+      .hero-overlay {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+          90deg,
+          rgba(0, 0, 0, 0.96) 0%,
+          rgba(0, 0, 0, 0.84) 30%,
+          rgba(0, 0, 0, 0.42) 54%,
+          rgba(0, 0, 0, 0.04) 100%
+        );
+        z-index: 1;
+      }
+
+      .hero-content {
+        position: relative;
+        z-index: 2;
+
+        display: flex;
+        align-items: center;
+        gap: 0px;
+
+        width: 100%;
+        max-width: 1500px;
+        padding: 0 5%;
+      }
+
+      .hero-logo-block {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+      }
+
+      .hero-logo-block,
+      .hero-text {
+        min-height: 360px;
+      }
+
+      .hero-logo {
+        width: 250px;
+        max-width: 20vw;
+        height: auto;
+        display: block;
+      }
+
+      .hero-logo-text {
+        margin-top: 12px;
+        text-align: center;
+        line-height: 0.9;
+        text-transform: uppercase;
+      }
+
+      .hero-logo-text span {
+        display: block;
+        font-family: "Oswald", sans-serif;
+        font-size: clamp(0.95rem, 1.3vw, 1.65rem);
+        margin-bottom: 2px;
+        font-weight: 700;
+        letter-spacing: 1px;
+        color: #ffffff;
+      }
+
+      .hero-logo-text strong {
+        display: block;
+        font-family: "Teko", sans-serif;
+        font-size: clamp(2.2rem, 3.2vw, 4rem);
+        font-weight: 700;
+        letter-spacing: 2px;
+        color: #d9a441;
+      }
+
+      .hero-text {
+        max-width: none;
+        flex: 1;
+
+        display: flex;
+        align-items: center;
+      }
+
+      .hero-text-inner {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+
+        min-height: 360px;
+      }
+
+      .hero-middle-text {
+        font-size: clamp(4.2rem, 8vw, 8.8rem);
+        color: #d9a441;
+      }
+
+      .hero-text h1 {
+        margin: 0 0 18px;
+
+        font-family: "Teko", "Oswald", sans-serif;
+        font-size: clamp(5rem, 7vw, 8.2rem);
+        font-weight: 700;
+        line-height: 0.78;
+        letter-spacing: 0.8px;
+        text-transform: uppercase;
+
+        color: #ffffff;
+        text-shadow: 0 4px 18px rgba(0, 0, 0, 0.65);
+      }
+
+      .hero-text h1 span {
+        display: block;
+        white-space: nowrap;
+      }
+
+      .hero-description {
+        margin: 0 0 24px 5px;
+
+        font-family: "Rajdhani", sans-serif;
+        font-size: clamp(1.1rem, 1.45vw, 1.6rem);
+        font-weight: 400;
+
+        color: #d9a441;
+      }
+
+      .hero-cta {
+        width: fit-content;
+        margin-left: 5px;
+
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+
+        padding: 13px 28px;
+
+        font-family: "Oswald", sans-serif;
+        font-size: clamp(0.95rem, 1vw, 1.1rem);
+        font-weight: 700;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        text-decoration: none;
+
+        color: #0a0a0a;
+        background: #d9a441;
+        border: 2px solid #d9a441;
+
+        box-shadow: 0 8px 28px rgba(217, 164, 65, 0.2);
+        transition:
+          background 0.2s ease,
+          color 0.2s ease,
+          transform 0.2s ease,
+          box-shadow 0.2s ease;
+      }
+
+      .hero-cta:hover {
+        background: transparent;
+        color: #d9a441;
+        transform: translateY(-2px);
+        box-shadow: 0 12px 34px rgba(217, 164, 65, 0.28);
+      }
+
+      /* ===== SECTIONS ===== */
+      .section {
+        padding: 3rem 1.5rem;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      .section-label {
+        font-family: "Oswald", sans-serif;
+        font-size: 0.75rem;
+        font-weight: 700;
+        letter-spacing: 4px;
+        text-transform: uppercase;
+        color: var(--gold);
+        margin-bottom: 0.6rem;
+      }
+
+      .section-title {
+        font-family: "Oswald", sans-serif;
+        font-size: 2rem;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        color: var(--white);
+        margin-bottom: 1.5rem;
+        padding-bottom: 0.7rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      }
+
+      /* ===== RULES ===== */
+      .rules-section {
+        padding-top: 4rem;
+      }
+
+      .section-heading {
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        gap: 2rem;
+        margin-bottom: 1.8rem;
+      }
+
+      .section-title {
+        margin-bottom: 0;
+      }
+
+      .entry-alert {
+        min-width: 240px;
+        padding: 1rem 1.2rem;
+
+        background: linear-gradient(
+          135deg,
+          rgba(201, 168, 76, 0.16),
+          rgba(201, 168, 76, 0.04)
+        );
+        border: 1px solid rgba(201, 168, 76, 0.35);
+        border-radius: 6px;
+      }
+
+      .entry-alert span {
+        display: block;
+
+        font-family: "Oswald", sans-serif;
+        font-size: 0.72rem;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+
+        color: rgba(255, 255, 255, 0.45);
+        margin-bottom: 0.25rem;
+      }
+
+      .entry-alert strong {
+        display: block;
+
+        font-family: "Teko", sans-serif;
+        font-size: 2.4rem;
+        line-height: 0.9;
+        letter-spacing: 1px;
+
+        color: var(--gold);
+      }
+
+      .entry-alert small {
+        display: block;
+        margin-top: 0.45rem;
+
+        font-size: 0.85rem;
+        line-height: 1.3;
+        color: rgba(255, 255, 255, 0.62);
+      }
+
+      .pix-callout {
+        margin-bottom: 1.6rem;
+        padding: 1.1rem 1.3rem;
+
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1.5rem;
+
+        background: rgba(255, 255, 255, 0.035);
+        border: 1px solid rgba(255, 255, 255, 0.07);
+        border-left: 4px solid var(--gold);
+        border-radius: 6px;
+      }
+
+      .pix-callout-label {
+        display: block;
+
+        font-family: "Oswald", sans-serif;
+        font-size: 0.72rem;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+
+        color: rgba(255, 255, 255, 0.38);
+        margin-bottom: 0.35rem;
+      }
+
+      .pix-callout strong {
+        font-family: "Rajdhani", sans-serif;
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: var(--gold);
+      }
+
+      .pix-callout p {
+        max-width: 470px;
+
+        font-size: 0.95rem;
+        line-height: 1.45;
+        color: rgba(255, 255, 255, 0.62);
+      }
+
+      .rules-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 14px;
+      }
+
+      .rule-card {
+        position: relative;
+        overflow: hidden;
+
+        display: flex;
+        gap: 1rem;
+
+        min-height: 160px;
+        padding: 1.35rem;
+
+        background: linear-gradient(
+          135deg,
+          rgba(255, 255, 255, 0.055),
+          rgba(255, 255, 255, 0.025)
+        );
+        border: 1px solid rgba(255, 255, 255, 0.075);
+        border-radius: 6px;
+      }
+
+      .rule-card::before {
+        content: "";
+        position: absolute;
+        inset: 0 auto 0 0;
+
+        width: 3px;
+        background: rgba(201, 168, 76, 0.55);
+      }
+
+      .rule-card.highlight {
+        background: linear-gradient(
+          135deg,
+          rgba(201, 168, 76, 0.13),
+          rgba(255, 255, 255, 0.025)
+        );
+        border-color: rgba(201, 168, 76, 0.25);
+      }
+
+      .rule-card.full {
+        grid-column: 1 / -1;
+        min-height: auto;
+      }
+
+      .rule-number {
+        font-family: "Teko", sans-serif;
+        font-size: 2.2rem;
+        font-weight: 700;
+        line-height: 0.9;
+
+        color: rgba(201, 168, 76, 0.85);
+        flex-shrink: 0;
+      }
+
+      .rule-content h3 {
+        margin-bottom: 0.55rem;
+
+        font-family: "Oswald", sans-serif;
+        font-size: 1.15rem;
+        font-weight: 700;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+
+        color: var(--white);
+      }
+
+      .rule-content p {
+        font-family: "Rajdhani", sans-serif;
+        font-size: 1rem;
+        font-weight: 500;
+        line-height: 1.5;
+
+        color: rgba(255, 255, 255, 0.68);
+      }
+
+      .rule-content strong {
+        color: var(--gold);
+        font-weight: 700;
+      }
+
+      .good-luck-box {
+        margin-top: 1.5rem;
+        padding: 1rem 1.3rem;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.75rem;
+
+        background: #050505;
+        border: 1px solid rgba(201, 168, 76, 0.2);
+        border-radius: 6px;
+      }
+
+      .good-luck-box p {
+        font-family: "Oswald", sans-serif;
+        font-size: 1rem;
+        font-weight: 700;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+
+        color: var(--gold);
+      }
+
+      /* ===== PRIZE CARDS ===== */
+      .prize-cards {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+        margin-bottom: 1.5rem;
+      }
+
+      .prize-card {
+        background: var(--gray);
+        border: 1px solid rgba(255, 255, 255, 0.07);
+        border-radius: 4px;
+        padding: 1.3rem;
+        text-align: center;
+      }
+
+      .prize-card.gold {
+        border-color: rgba(201, 168, 76, 0.5);
+        background: rgba(201, 168, 76, 0.06);
+      }
+
+      .prize-card .val {
+        font-family: "Bebas Neue", sans-serif;
+        font-size: 2.4rem;
+        color: var(--gold);
+        line-height: 1;
+        margin-bottom: 0.3rem;
+      }
+
+      .prize-card .lbl {
+        font-family: "Oswald", sans-serif;
+        font-size: 0.78rem;
+        font-weight: 700;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        color: rgba(255, 255, 255, 0.4);
+      }
+
+      /* ===== FORM ===== */
+      .form-section {
+        background: var(--off-white);
+        border-radius: 4px;
+        padding: 2rem 1.5rem;
+        color: var(--black);
+      }
+
+      .form-section h2 {
+        font-family: "Oswald", sans-serif;
+        font-size: 1.8rem;
+        font-weight: 800;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        color: var(--black);
+        margin-bottom: 0.3rem;
+      }
+
+      .form-section .fs-sub {
+        font-size: 0.9rem;
+        color: #666;
+        margin-bottom: 1.5rem;
+      }
+
+      .step-tabs {
+        display: flex;
+        margin-bottom: 2rem;
+        border-bottom: 2px solid #d0cec7;
+      }
+
+      .step-tab {
+        flex: 1;
+        padding: 10px 6px;
+        text-align: center;
+        font-family: "Oswald", sans-serif;
+        font-size: 0.8rem;
+        font-weight: 700;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        background: transparent;
+        color: #aaa;
+        cursor: pointer;
+        border: none;
+        outline: none;
+        border-bottom: 2px solid transparent;
+        margin-bottom: -2px;
+        transition: all 0.2s;
+      }
+
+      .step-tab.active {
+        color: var(--black);
+        border-bottom-color: var(--gold-dark);
+      }
+
+      .step-tab .tab-num {
+        display: block;
+        font-size: 1.2rem;
+        font-weight: 800;
+      }
+
+      .form-panel {
+        display: none;
+      }
+
+      .form-panel.active {
+        display: block;
+      }
+
+      .field {
+        margin-bottom: 1.2rem;
+      }
+
+      .field label {
+        display: block;
+        font-family: "Oswald", sans-serif;
+        font-size: 0.78rem;
+        font-weight: 700;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        color: #555;
+        margin-bottom: 0.4rem;
+      }
+
+      .field input,
+      .field textarea {
+        width: 100%;
+        padding: 10px 14px;
+        border: 1.5px solid #d0cec7;
+        border-radius: 3px;
+        font-family: "Rajdhani", sans-serif;
+        font-size: 0.95rem;
+        color: var(--black);
+        background: #fff;
+        transition: border-color 0.2s;
+        outline: none;
+      }
+
+      .field input:focus,
+      .field textarea:focus {
+        border-color: var(--gold-dark);
+      }
+
+      .field textarea {
+        resize: vertical;
+        min-height: 80px;
+      }
+
+      /* ===== PIX ===== */
+      .pix-box {
+        background: #fff;
+        border: 2px dashed #c9a84c;
+        border-radius: 4px;
+        padding: 1.3rem;
+        text-align: center;
+        margin-bottom: 1.5rem;
+      }
+
+      .pix-box .pix-label {
+        font-family: "Oswald", sans-serif;
+        font-size: 0.72rem;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: #888;
+        margin-bottom: 0.5rem;
+      }
+
+      .pix-key {
+        font-family: "Oswald", sans-serif;
+        font-size: 1.3rem;
+        font-weight: 800;
+        color: var(--black);
+        letter-spacing: 0.5px;
+        margin-bottom: 0.2rem;
+      }
+
+      .pix-name {
+        font-size: 0.85rem;
+        color: #666;
+        margin-bottom: 0.6rem;
+      }
+
+      .pix-amount {
+        display: inline-block;
+        background: var(--black);
+        color: var(--gold);
+        font-family: "Bebas Neue", sans-serif;
+        font-size: 1.8rem;
+        letter-spacing: 2px;
+        padding: 4px 18px;
+        border-radius: 2px;
+      }
+
+      .copy-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        margin-top: 0.8rem;
+        background: var(--black);
+        color: var(--gold);
+        border: none;
+        border-radius: 2px;
+        font-family: "Oswald", sans-serif;
+        font-size: 0.78rem;
+        font-weight: 700;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        padding: 7px 16px;
+        cursor: pointer;
+        transition: opacity 0.2s;
+      }
+
+      .copy-btn:hover {
+        opacity: 0.8;
+      }
+
+      /* ===== UPLOAD ===== */
+      .upload-area {
+        border: 2px dashed #d0cec7;
+        border-radius: 3px;
+        padding: 1.5rem;
+        text-align: center;
+        cursor: pointer;
+        transition:
+          border-color 0.2s,
+          background 0.2s;
+        position: relative;
+      }
+
+      .upload-area:hover {
+        border-color: #c9a84c;
+        background: #fbf8f0;
+      }
+
+      .upload-area input[type="file"] {
+        position: absolute;
+        inset: 0;
+        opacity: 0;
+        cursor: pointer;
+        width: 100%;
+        height: 100%;
+      }
+
+      .upload-area .upload-icon {
+        font-size: 1.8rem;
+        margin-bottom: 0.5rem;
+        display: block;
+      }
+
+      .upload-area .upload-text {
+        font-size: 0.9rem;
+        color: #777;
+      }
+
+      .upload-area .upload-text span {
+        color: #8c6a1a;
+        font-weight: 600;
+      }
+
+      .file-preview {
+        display: none;
+        margin-top: 0.8rem;
+        background: #fbf8f0;
+        border: 1px solid #c9a84c;
+        border-radius: 3px;
+        padding: 8px 12px;
+        font-size: 0.85rem;
+        color: #8c6a1a;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .file-preview.show {
+        display: flex;
+      }
+
+      /* ===== BUTTONS ===== */
+      .btn-primary {
+        width: 100%;
+        background: var(--black);
+        color: var(--gold);
+        border: 2px solid var(--gold);
+        border-radius: 2px;
+        font-family: "Oswald", sans-serif;
+        font-size: 1.1rem;
+        font-weight: 800;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        padding: 14px;
+        cursor: pointer;
+        transition: all 0.2s;
+        margin-top: 0.5rem;
+      }
+
+      .btn-primary:hover {
+        background: var(--gold);
+        color: var(--black);
+      }
+
+      .btn-primary:active {
+        transform: scale(0.98);
+      }
+
+      .btn-primary.invert {
+        background: var(--gold);
+        color: var(--black);
+        border-color: var(--gold);
+      }
+
+      .btn-primary.invert:hover {
+        background: var(--gold-light);
+        border-color: var(--gold-light);
+      }
+
+      .btn-secondary {
+        width: 100%;
+        background: transparent;
+        color: #888;
+        border: 1px solid #d0cec7;
+        border-radius: 2px;
+        font-family: "Oswald", sans-serif;
+        font-size: 0.9rem;
+        font-weight: 700;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        padding: 11px;
+        cursor: pointer;
+        margin-top: 0.5rem;
+        transition: border-color 0.2s;
+      }
+
+      .btn-secondary:hover {
+        border-color: #999;
+        color: #555;
+      }
+
+      /* ===== SUCCESS ===== */
+      .success-panel {
+        display: none;
+        text-align: center;
+        padding: 2rem 1rem;
+      }
+
+      .success-panel.show {
+        display: block;
+      }
+
+      .success-panel .s-icon {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+      }
+
+      .success-panel h3 {
+        font-family: "Oswald", sans-serif;
+        font-size: 2rem;
+        font-weight: 800;
+        text-transform: uppercase;
+        color: var(--black);
+        margin-bottom: 0.5rem;
+      }
+
+      .success-panel p {
+        font-size: 0.95rem;
+        color: #555;
+        line-height: 1.6;
+      }
+
+      /* ===== FOOTER ===== */
+      .site-footer {
+        margin-top: 3rem;
+        background: linear-gradient(
+          180deg,
+          rgba(10, 10, 10, 0.96) 0%,
+          rgba(0, 0, 0, 1) 100%
+        );
+        border-top: 1px solid rgba(201, 168, 76, 0.22);
+        color: var(--white);
+      }
+
+      .footer-inner {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 2.4rem 1.5rem;
+
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 2rem;
+      }
+
+      .footer-brand {
+        display: flex;
+        align-items: center;
+        gap: 1.2rem;
+        max-width: 520px;
+      }
+
+      .footer-logo {
+        width: 72px;
+        height: auto;
+        flex-shrink: 0;
+      }
+
+      .footer-brand h3 {
+        font-family: "Oswald", sans-serif;
+        font-size: 1.35rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        color: var(--white);
+        margin-bottom: 0.35rem;
+      }
+
+      .footer-brand p {
+        font-size: 0.95rem;
+        line-height: 1.5;
+        color: rgba(255, 255, 255, 0.58);
+      }
+
+      .footer-info {
+        display: grid;
+        grid-template-columns: repeat(3, auto);
+        gap: 1.5rem;
+      }
+
+      .footer-info div {
+        min-width: 120px;
+        padding-left: 1rem;
+        border-left: 1px solid rgba(201, 168, 76, 0.28);
+      }
+
+      .footer-info span {
+        display: block;
+        margin-bottom: 0.25rem;
+
+        font-family: "Oswald", sans-serif;
+        font-size: 0.68rem;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+
+        color: rgba(255, 255, 255, 0.35);
+      }
+
+      .footer-info strong {
+        display: block;
+
+        font-family: "Rajdhani", sans-serif;
+        font-size: 1rem;
+        font-weight: 700;
+        color: var(--gold);
+      }
+
+      .footer-bottom {
+        border-top: 1px solid rgba(255, 255, 255, 0.06);
+        padding: 1rem 1.5rem;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 1rem;
+
+        font-family: "Oswald", sans-serif;
+        font-size: 0.72rem;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+
+        color: rgba(255, 255, 255, 0.28);
+      }
+
+      .footer-bottom span:not(:last-child)::after {
+        content: "•";
+        margin-left: 1rem;
+        color: var(--gold);
+      }
+
+      .sect-sep {
+        max-width: 700px;
+        margin: 0 auto;
+        height: 1px;
+        background: rgba(255, 255, 255, 0.06);
+      }
+
+      /* ===== RESPONSIVE ===== */
+      @media (max-width: 480px) {
+        .prize-cards {
+          grid-template-columns: 1fr;
+        }
+        .hero-content {
+          width: 100%;
+          padding: 3rem 2rem;
+        }
+        .hero h1 {
+          font-size: 3.5rem;
+        }
+      }
+
+      @media (max-width: 900px) {
+        .hero-copa {
+          min-height: 760px;
+          background-position: 68% center;
+        }
+
+        .hero-content {
+          align-items: flex-start;
+          flex-direction: column;
+          gap: 30px;
+          padding: 80px 32px 0;
+        }
+
+        .hero-logo-block {
+          align-items: flex-start;
+        }
+
+        .hero-logo {
+          width: 118px;
+          max-width: 35vw;
+        }
+
+        .hero-logo-text {
+          text-align: left;
+        }
+
+        .hero-text h1 {
+          max-width: 560px;
+          font-size: clamp(4rem, 14vw, 6rem);
+        }
+
+        .hero-text {
+          align-items: flex-start;
+        }
+
+        .hero-logo-block,
+        .hero-text,
+        .hero-text-inner {
+          min-height: auto;
+        }
+
+        .hero-cta {
+          margin-top: 4px;
+        }
+
+        .footer-inner {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+
+        .footer-info {
+          width: 100%;
+          grid-template-columns: 1fr;
+          gap: 1rem;
+        }
+
+        .footer-bottom {
+          flex-direction: column;
+          gap: 0.35rem;
+          text-align: center;
+        }
+
+        .footer-bottom span:not(:last-child)::after {
+          content: "";
+          margin-left: 0;
+        }
+
+        .section-heading {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+
+        .entry-alert {
+          width: 100%;
+        }
+
+        .pix-callout {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+
+        .rules-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .rule-card.full {
+          grid-column: auto;
+        }
+      }
+
+      @media (max-width: 520px) {
+        .hero-copa {
+          min-height: 680px;
+          background-position: 72% center;
+        }
+
+        .hero-content {
+          padding: 60px 24px 0;
+        }
+
+        .hero-logo {
+          width: 90px;
+        }
+
+        .hero-text h1 {
+          font-size: 3.8rem;
+          letter-spacing: 2px;
+        }
+
+        .hero-subtitle {
+          font-size: 0.9rem;
+        }
+
+        .hero-location {
+          font-size: 1.2rem;
+        }
+
+        .hero-description {
+          font-size: 1rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- HERO -->
+    <section class="hero-copa">
+      <div class="hero-overlay"></div>
+
+      <div class="hero-content">
+        <div class="hero-logo-block">
+          <img
+            src="logo-white.png"
+            alt="FIFA World Cup 2026"
+            class="hero-logo"
+          />
+
+          <div class="hero-logo-text">
+            <span>WORLD CUP</span>
+            <strong>2026</strong>
+          </div>
+        </div>
+
+        <div class="hero-text">
+          <div class="hero-text-inner">
+            <h1>
+              <span>CARTOLA COPA</span>
+              <span>DO MUNDO</span>
+            </h1>
+
+            <p class="hero-description">
+              Inscreva-se e participe da nossa liga
+            </p>
+
+            <a href="#inscricao" class="hero-cta"> Inscrever-se </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- REGRAS -->
+    <section class="section rules-section">
+      <div class="section-heading">
+        <div>
+          <div class="section-label">Como funciona</div>
+          <h2 class="section-title">Regras do Cartola Copa do Mundo</h2>
+        </div>
+
+        <div class="entry-alert">
+          <span>Inscrição</span>
+          <strong>R$ 15,00</strong>
+          <small>Enviar antes do início da Copa do Mundo</small>
+        </div>
+      </div>
+
+      <div class="pix-callout">
+        <div>
+          <span class="pix-callout-label">Chave Pix</span>
+          <strong>SUA CHAVE PIX AQUI</strong>
+        </div>
+
+        <p>
+          A participação só será confirmada após o envio e validação do
+          comprovante de pagamento.
+        </p>
+      </div>
+
+      <div class="rules-grid">
+        <article class="rule-card highlight">
+          <div class="rule-number">01</div>
+          <div class="rule-content">
+            <h3>Prêmio por rodada</h3>
+            <p>
+              O jogador com a maior pontuação da rodada recebe
+              <strong>R$ 10,00</strong> do jogador com a menor pontuação da
+              rodada.
+            </p>
+          </div>
+        </article>
+
+        <article class="rule-card">
+          <div class="rule-number">02</div>
+          <div class="rule-content">
+            <h3>Comprovante da escalação</h3>
+            <p>
+              Todos os participantes devem tirar um print da escalação antes do
+              início da rodada para evitar problemas em caso de bugs ou falhas
+              no aplicativo.
+            </p>
+          </div>
+        </article>
+
+        <article class="rule-card">
+          <div class="rule-number">03</div>
+          <div class="rule-content">
+            <h3>Esquecimento de escalação</h3>
+            <p>
+              Caso um jogador esqueça de escalar seu time, a responsabilidade é
+              exclusivamente dele. As regras e pagamentos continuam válidos
+              normalmente.
+            </p>
+          </div>
+        </article>
+
+        <article class="rule-card highlight">
+          <div class="rule-number">04</div>
+          <div class="rule-content">
+            <h3>Premiação do campeão</h3>
+            <p>
+              Ao final da competição, o campeão receberá
+              <strong>R$ 15,00 de cada participante</strong> da liga.
+            </p>
+          </div>
+        </article>
+
+        <article class="rule-card full">
+          <div class="rule-number">05</div>
+          <div class="rule-content">
+            <h3>Aceitação das regras</h3>
+            <p>
+              Ao participar da liga, todos os jogadores concordam
+              automaticamente com as regras acima.
+            </p>
+          </div>
+        </article>
+      </div>
+
+      <div class="good-luck-box">
+        <p>Boa sorte a todos e que vença o melhor cartoleiro!</p>
+      </div>
+    </section>
+
+    <div class="sect-sep"></div>
+
+    <!-- FORM -->
+    <div class="section" id="inscricao">
+      <div class="section-label">Quero participar</div>
+      <div class="section-title">Faça sua inscrição</div>
+
+      <form
+        class="form-section"
+        id="formSection"
+        name="inscricao-cartola"
+        method="POST"
+        data-netlify="true"
+        netlify-honeypot="bot-field"
+      >
+        <input type="hidden" name="form-name" value="inscricao-cartola" />
+        <input type="hidden" name="bot-field" style="display: none" />
+        <div class="step-tabs">
+          <button class="step-tab active" onclick="goStep(0)" id="tab0">
+            <span class="tab-num">1</span>Dados
+          </button>
+          <button class="step-tab" onclick="goStep(1)" id="tab1">
+            <span class="tab-num">2</span>Pagamento
+          </button>
+          <button class="step-tab" onclick="goStep(2)" id="tab2">
+            <span class="tab-num">3</span>Comprovante
+          </button>
+        </div>
+
+        <!-- Passo 1 -->
+        <div class="form-panel active" id="panel0">
+          <h2>Seus dados</h2>
+          <p class="fs-sub">Preencha para registrar sua inscrição.</p>
+          <div class="field">
+            <label>Nome completo</label>
+            <input type="text" id="nome" placeholder="Ex: João da Silva" />
+          </div>
+          <div class="field">
+            <label>Nickname no Cartola FC</label>
+            <input type="text" id="nick" placeholder="Ex: @craquesilva" />
+          </div>
+          <div class="field">
+            <label>WhatsApp</label>
+            <input type="tel" id="wpp" placeholder="(85) 99999-9999" />
+          </div>
+          <button class="btn-primary invert" onclick="nextStep(0)">
+            Próximo: pagamento →
+          </button>
+        </div>
+
+        <!-- Passo 2 -->
+        <div class="form-panel" id="panel1">
+          <h2>Pague a inscrição</h2>
+          <p class="fs-sub">Envie R$&nbsp;15,00 para a chave Pix abaixo.</p>
+          <div class="pix-box">
+            <div class="pix-label">Chave Pix</div>
+            <div class="pix-key">SEU.CONTATO@EMAIL.COM</div>
+            <div class="pix-name">Nome do responsável aqui</div>
+            <div class="pix-amount">R$ 15,00</div>
+            <br />
+            <button class="copy-btn" onclick="copyPix()">⧉ Copiar chave</button>
+          </div>
+          <p
+            style="
+              font-size: 0.85rem;
+              color: #888;
+              text-align: center;
+              margin-bottom: 1.2rem;
+            "
+          >
+            Após o pagamento, avance para enviar o comprovante.
+          </p>
+          <button class="btn-primary invert" onclick="nextStep(1)">
+            Já paguei →
+          </button>
+          <button class="btn-secondary" onclick="goStep(0)">← Voltar</button>
+        </div>
+
+        <!-- Passo 3 -->
+        <div class="form-panel" id="panel2">
+          <h2>Comprovante</h2>
+          <p class="fs-sub">Envie a foto ou PDF do comprovante de pagamento.</p>
+          <div
+            class="upload-area"
+            onclick="document.getElementById('fileInput').click()"
+          >
+            <input
+              type="file"
+              id="fileInput"
+              name="comprovante"
+              accept="image/*,.pdf"
+              onchange="onFileSelect(this)"
+            />
+            <span class="upload-icon">📎</span>
+            <div class="upload-text">
+              <span>Clique para selecionar</span> ou arraste aqui<br />
+              <small style="color: #aaa">Imagem ou PDF · Máx. 10MB</small>
+            </div>
+          </div>
+          <div class="file-preview" id="filePreview">
+            ✅ <span id="fileName">arquivo</span>
+          </div>
+          <div class="field" style="margin-top: 1rem">
+            <label>Observações (opcional)</label>
+            <textarea
+              id="obs"
+              placeholder="Algum recado para o organizador?"
+            ></textarea>
+          </div>
+          <button class="btn-primary invert" onclick="submitForm()">
+            Enviar inscrição ↗
+          </button>
+          <button class="btn-secondary" onclick="goStep(1)">← Voltar</button>
+        </div>
+
+        <!-- Sucesso -->
+        <div class="success-panel" id="successPanel">
+          <div class="s-icon">🎉</div>
+          <h3>Inscrição enviada!</h3>
+          <p>
+            <strong id="nomeConfirm"></strong>, recebemos seus dados e
+            comprovante.<br /><br />
+            Assim que validarmos o pagamento, você receberá o link da liga pelo
+            WhatsApp.<br /><br />
+            <em style="color: #aaa">Até a bola rolar! ⚽</em>
+          </p>
+        </div>
+      </form>
+    </div>
+
+    <footer class="site-footer">
+      <div class="footer-inner">
+        <div class="footer-brand">
+          <img
+            src="logo-white.png"
+            alt="FIFA World Cup 2026"
+            class="footer-logo"
+          />
+
+          <div>
+            <h3>Cartola Copa do Mundo</h3>
+            <p>Campeonato privado entre amigos para a Copa do Mundo 2026.</p>
+          </div>
+        </div>
+
+        <div class="footer-info">
+          <div>
+            <span>Competição</span>
+            <strong>Cartola FC</strong>
+          </div>
+
+          <div>
+            <span>Inscrição</span>
+            <strong>R$ 15,00</strong>
+          </div>
+
+          <div>
+            <span>Sede</span>
+            <strong>USA · Canada · Mexico</strong>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <span>WE ARE 26</span>
+        <span>Cartola FC · Liga privada</span>
+        <span>Copa do Mundo 2026</span>
+      </div>
+    </footer>
+
+    <script>
+      const PIX_KEY = "SEU.CONTATO@EMAIL.COM";
+
+      function goStep(n) {
+        document
+          .querySelectorAll(".form-panel")
+          .forEach((p, i) => p.classList.toggle("active", i === n));
+        document
+          .querySelectorAll(".step-tab")
+          .forEach((t, i) => t.classList.toggle("active", i === n));
+      }
+
+      function nextStep(from) {
+        if (from === 0) {
+          const n = document.getElementById("nome").value.trim();
+          const k = document.getElementById("nick").value.trim();
+          const w = document.getElementById("wpp").value.trim();
+          if (!n || !k || !w) {
+            alert("Preencha todos os campos!");
+            return;
+          }
+        }
+        goStep(from + 1);
+      }
+
+      function copyPix() {
+        navigator.clipboard
+          .writeText(PIX_KEY)
+          .then(() => {
+            const b = document.querySelector(".copy-btn");
+            const o = b.textContent;
+            b.textContent = "✓ Copiado!";
+            setTimeout(() => {
+              b.textContent = o;
+            }, 2000);
+          })
+          .catch(() => alert("Chave: " + PIX_KEY));
+      }
+
+      function onFileSelect(input) {
+        if (input.files && input.files[0]) {
+          document.getElementById("fileName").textContent = input.files[0].name;
+          document.getElementById("filePreview").classList.add("show");
+        }
+      }
+
+      function submitForm() {
+        if (!document.getElementById("fileInput").files[0]) {
+          alert("Selecione o comprovante!");
+          return;
+        }
+
+        const nome = document.getElementById("nome").value.trim();
+        const nick = document.getElementById("nick").value.trim();
+        const wpp = document.getElementById("wpp").value.trim();
+        const obs = document.getElementById("obs").value.trim();
+        const file = document.getElementById("fileInput").files[0];
+
+        const formData = new FormData();
+        formData.append("form-name", "inscricao-cartola");
+        formData.append("nome", nome);
+        formData.append("nickname", nick);
+        formData.append("whatsapp", wpp);
+        formData.append("observacoes", obs);
+        formData.append("comprovante", file);
+
+        fetch("/", {
+          method: "POST",
+          body: formData,
+        })
+          .then(() => {
+            document.querySelector(".step-tabs").style.display = "none";
+            document
+              .querySelectorAll(".form-panel")
+              .forEach((p) => p.classList.remove("active"));
+            document.getElementById("successPanel").classList.add("show");
+            document.getElementById("nomeConfirm").textContent = nome;
+          })
+          .catch(() => alert("Erro ao enviar. Tente novamente."));
+      }
+    </script>
+  </body>
+</html>
