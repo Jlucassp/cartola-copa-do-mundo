@@ -1245,7 +1245,11 @@
             <label>WhatsApp</label>
             <input type="tel" id="wpp" placeholder="(85) 99999-9999" />
           </div>
-          <button class="btn-primary invert" onclick="nextStep(0)">
+          <button
+            type="button"
+            class="btn-primary invert"
+            onclick="nextStep(0)"
+          >
             Próximo: pagamento →
           </button>
         </div>
@@ -1260,7 +1264,9 @@
             <div class="pix-name">Nome do responsável aqui</div>
             <div class="pix-amount">R$ 15,00</div>
             <br />
-            <button class="copy-btn" onclick="copyPix()">⧉ Copiar chave</button>
+            <button type="button" class="copy-btn" onclick="copyPix()">
+              ⧉ Copiar chave
+            </button>
           </div>
           <p
             style="
@@ -1272,10 +1278,16 @@
           >
             Após o pagamento, avance para enviar o comprovante.
           </p>
-          <button class="btn-primary invert" onclick="nextStep(1)">
+          <button
+            type="button"
+            class="btn-primary invert"
+            onclick="nextStep(1)"
+          >
             Já paguei →
           </button>
-          <button class="btn-secondary" onclick="goStep(0)">← Voltar</button>
+          <button type="button" class="btn-secondary" onclick="goStep(0)">
+            ← Voltar
+          </button>
         </div>
 
         <!-- Passo 3 -->
@@ -1312,7 +1324,9 @@
           <button class="btn-primary invert" onclick="submitForm()">
             Enviar inscrição ↗
           </button>
-          <button class="btn-secondary" onclick="goStep(1)">← Voltar</button>
+          <button type="button" class="btn-secondary" onclick="goStep(1)">
+            ← Voltar
+          </button>
         </div>
 
         <!-- Sucesso -->
