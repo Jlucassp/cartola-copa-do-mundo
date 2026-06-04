@@ -1331,23 +1331,20 @@
         <div class="form-panel" id="panel2">
           <h2>Comprovante</h2>
           <p class="fs-sub">Envie a foto ou PDF do comprovante de pagamento.</p>
-          <div
-            class="upload-area"
-            onclick="document.getElementById('fileInput').click()"
-          >
-            <input
-              type="file"
-              id="fileInput"
-              name="comprovante"
-              accept="image/*,.pdf"
-              onchange="onFileSelect(this)"
-            />
-            <span class="upload-icon">📎</span>
-            <div class="upload-text">
-              <span>Clique para selecionar</span> ou arraste aqui<br />
-              <small style="color: #aaa">Imagem ou PDF · Máx. 10MB</small>
-            </div>
-          </div>
+          <label class="upload-area" for="fileInput">
+              <input
+                type="file"
+                id="fileInput"
+                name="comprovante"
+                accept="image/*,.pdf"
+                onchange="onFileSelect(this)"
+              />
+              <span class="upload-icon">📎</span>
+              <div class="upload-text">
+                  <span>Clique para selecionar</span> ou arraste aqui<br />
+                  <small style="color: #aaa">Imagem ou PDF · Máx. 10MB</small>
+              </div>
+          </label>
           <div class="file-preview" id="filePreview">
             ✅ <span id="fileName">arquivo</span>
           </div>
