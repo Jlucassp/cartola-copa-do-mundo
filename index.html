@@ -1060,6 +1060,12 @@
           background-position: 72% center;
         }
 
+        .hero-text h1 {
+          font-size: 3.8rem;
+          letter-spacing: 2px;
+          padding-right: 1.5rem;
+        }
+
         .hero-content {
           padding: 60px 24px 0;
         }
@@ -1141,7 +1147,13 @@
       <div class="pix-callout">
         <div>
           <span class="pix-callout-label">Chave Pix</span>
-          <strong>62574855337</strong>
+          <strong
+            id="pixKeyCallout"
+            onclick="copyPixCallout()"
+            style="cursor: pointer"
+            title="Clique para copiar"
+            >62574855337</strong
+          >
         </div>
 
         <p>
@@ -1421,6 +1433,20 @@
 
     <script>
       const PIX_KEY = "62574855337";
+
+      function copyPixCallout() {
+        navigator.clipboard
+          .writeText(PIX_KEY)
+          .then(() => {
+            const el = document.getElementById("pixKeyCallout");
+            const original = el.textContent;
+            el.textContent = "✓ Copiado!";
+            setTimeout(() => {
+              el.textContent = original;
+            }, 2000);
+          })
+          .catch(() => alert("Chave: " + PIX_KEY));
+      }
 
       function goStep(n) {
         document
