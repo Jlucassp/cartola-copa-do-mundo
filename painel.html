@@ -1,0 +1,889 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Painel · Cartola Copa do Mundo 2026</title>
+    <link rel="icon" type="image/png" href="logo-white.png" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Teko:wght@500;600;700&family=Rajdhani:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Biblioteca do Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <style>
+      * { box-sizing: border-box; margin: 0; padding: 0; }
+
+      :root {
+        --black: #0a0a0a;
+        --white: #ffffff;
+        --gold: #c9a84c;
+        --gold-light: #e8c96a;
+        --gold-dark: #8c6a1a;
+        --gray: #1a1a1a;
+        --gray-2: #141414;
+        --off-white: #f5f2ec;
+        --green: #6abf69;
+        --red: #d97070;
+        --line: rgba(255, 255, 255, 0.08);
+      }
+
+      body {
+        font-family: "Rajdhani", sans-serif;
+        background: var(--black);
+        color: var(--white);
+        -webkit-font-smoothing: antialiased;
+      }
+
+      /* ============ HEADER ============ */
+      .painel-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        padding: 1.1rem 1.5rem;
+        background: linear-gradient(180deg, #000 0%, rgba(10,10,10,0.95) 100%);
+        border-bottom: 1px solid rgba(201, 168, 76, 0.22);
+        position: sticky;
+        top: 0;
+        z-index: 30;
+      }
+      .ph-brand { display: flex; align-items: center; gap: 0.9rem; }
+      .ph-brand img { width: 44px; height: auto; }
+      .ph-brand .ph-eyebrow {
+        font-family: "Oswald", sans-serif;
+        font-size: 0.62rem; font-weight: 700; letter-spacing: 3px;
+        text-transform: uppercase; color: var(--gold);
+      }
+      .ph-brand h1 {
+        font-family: "Teko", sans-serif;
+        font-size: 1.5rem; font-weight: 700; line-height: 0.95;
+        letter-spacing: 1px; text-transform: uppercase;
+      }
+      .auth-area { display: flex; align-items: center; gap: 0.7rem; }
+      .auth-area .who {
+        font-size: 0.8rem; color: rgba(255,255,255,0.55);
+        max-width: 160px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+      }
+
+      /* ============ BOTÕES ============ */
+      .btn {
+        font-family: "Oswald", sans-serif;
+        font-size: 0.78rem; font-weight: 700; letter-spacing: 1px;
+        text-transform: uppercase; cursor: pointer;
+        padding: 9px 16px; border-radius: 3px; border: 2px solid var(--gold);
+        background: var(--gold); color: var(--black);
+        transition: all 0.18s ease;
+      }
+      .btn:hover { background: var(--gold-light); border-color: var(--gold-light); }
+      .btn.ghost { background: transparent; color: var(--gold); }
+      .btn.ghost:hover { background: rgba(201,168,76,0.12); }
+      .btn.small { padding: 6px 11px; font-size: 0.68rem; }
+      .btn.danger { border-color: var(--red); background: transparent; color: var(--red); }
+      .btn.danger:hover { background: rgba(217,112,112,0.12); }
+
+      /* ============ LAYOUT ============ */
+      main { max-width: 1100px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+
+      .block { margin-bottom: 2.6rem; }
+      .block-label {
+        font-family: "Oswald", sans-serif;
+        font-size: 0.7rem; font-weight: 700; letter-spacing: 4px;
+        text-transform: uppercase; color: var(--gold); margin-bottom: 0.5rem;
+      }
+      .block-title {
+        font-family: "Oswald", sans-serif;
+        font-size: 1.7rem; font-weight: 800; text-transform: uppercase;
+        letter-spacing: 1px; padding-bottom: 0.6rem;
+        border-bottom: 1px solid var(--line); margin-bottom: 1.3rem;
+      }
+
+      /* ============ RESUMO (faixa de stats) ============ */
+      .resumo {
+        display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px;
+        margin-bottom: 2.6rem;
+      }
+      .stat {
+        background: linear-gradient(135deg, rgba(255,255,255,0.055), rgba(255,255,255,0.02));
+        border: 1px solid var(--line); border-radius: 6px; padding: 1.1rem 1.2rem;
+        position: relative; overflow: hidden;
+      }
+      .stat::before {
+        content: ""; position: absolute; inset: 0 auto 0 0; width: 3px;
+        background: rgba(201,168,76,0.55);
+      }
+      .stat.gold {
+        background: linear-gradient(135deg, rgba(201,168,76,0.16), rgba(255,255,255,0.02));
+        border-color: rgba(201,168,76,0.3);
+      }
+      .stat .s-label {
+        font-family: "Oswald", sans-serif; font-size: 0.66rem; font-weight: 700;
+        letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.45);
+        margin-bottom: 0.35rem;
+      }
+      .stat .s-value {
+        font-family: "Teko", sans-serif; font-size: 2.4rem; line-height: 0.9;
+        letter-spacing: 1px; color: var(--gold);
+      }
+      .stat .s-sub { font-size: 0.8rem; color: rgba(255,255,255,0.5); margin-top: 0.25rem; }
+
+      /* ============ TABELA CLASSIFICAÇÃO ============ */
+      .tabela-wrap { overflow-x: auto; }
+      table.rank {
+        width: 100%; border-collapse: collapse; min-width: 560px;
+      }
+      table.rank th {
+        font-family: "Oswald", sans-serif; font-size: 0.68rem; font-weight: 700;
+        letter-spacing: 1.5px; text-transform: uppercase; text-align: left;
+        color: rgba(255,255,255,0.42); padding: 0.6rem 0.8rem;
+        border-bottom: 1px solid var(--line);
+      }
+      table.rank th.num, table.rank td.num { text-align: right; }
+      table.rank td {
+        padding: 0.75rem 0.8rem; border-bottom: 1px solid rgba(255,255,255,0.05);
+        font-size: 1rem; font-weight: 500;
+      }
+      table.rank tr:hover td { background: rgba(255,255,255,0.02); }
+      .pos {
+        font-family: "Teko", sans-serif; font-size: 1.4rem; color: rgba(255,255,255,0.55);
+        width: 42px;
+      }
+      tr.leader td { background: rgba(201,168,76,0.08); }
+      tr.leader .pos { color: var(--gold); }
+      tr.leader .nome { color: var(--gold); font-weight: 700; }
+      .nick { font-size: 0.82rem; color: rgba(255,255,255,0.45); }
+      .pts { font-family: "Teko", sans-serif; font-size: 1.5rem; color: var(--white); }
+      .saldo-pos { color: var(--green); font-weight: 700; }
+      .saldo-neg { color: var(--red); font-weight: 700; }
+      .saldo-zero { color: rgba(255,255,255,0.4); }
+
+      .crown { color: var(--gold); margin-left: 6px; }
+
+      /* ============ HISTÓRICO DE RODADAS ============ */
+      .rodadas-grid {
+        display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px;
+      }
+      .rodada-card {
+        background: var(--gray-2); border: 1px solid var(--line); border-radius: 6px;
+        padding: 1.1rem 1.2rem;
+      }
+      .rodada-card.aberta { border-color: rgba(201,168,76,0.35); }
+      .rc-top { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 0.8rem; }
+      .rc-num { font-family: "Teko", sans-serif; font-size: 1.6rem; letter-spacing: 1px; }
+      .rc-fase { font-size: 0.78rem; color: rgba(255,255,255,0.5); }
+      .rc-status {
+        font-family: "Oswald", sans-serif; font-size: 0.6rem; font-weight: 700;
+        letter-spacing: 1.5px; text-transform: uppercase; padding: 3px 8px; border-radius: 3px;
+      }
+      .rc-status.encerrada { background: rgba(106,191,105,0.15); color: var(--green); }
+      .rc-status.aberta { background: rgba(201,168,76,0.18); color: var(--gold); }
+      .rc-line { display: flex; justify-content: space-between; font-size: 0.92rem; padding: 0.25rem 0; }
+      .rc-line .lbl { color: rgba(255,255,255,0.45); }
+      .rc-line .v-win { color: var(--green); font-weight: 600; }
+      .rc-line .v-lose { color: var(--red); font-weight: 600; }
+      .rc-empate {
+        margin-top: 0.6rem; font-size: 0.75rem; color: var(--gold);
+        display: flex; align-items: center; gap: 5px;
+      }
+
+      .empty {
+        padding: 1.4rem; text-align: center; color: rgba(255,255,255,0.4);
+        border: 1px dashed var(--line); border-radius: 6px; font-size: 0.95rem;
+      }
+
+      /* ============ PAINEL ADMIN ============ */
+      #adminPanel { display: none; }
+      .admin-banner {
+        display: flex; align-items: center; gap: 0.6rem;
+        background: rgba(201,168,76,0.1); border: 1px solid rgba(201,168,76,0.3);
+        border-radius: 6px; padding: 0.7rem 1rem; margin-bottom: 1.4rem;
+        font-family: "Oswald", sans-serif; font-size: 0.75rem; font-weight: 700;
+        letter-spacing: 1.5px; text-transform: uppercase; color: var(--gold);
+      }
+      .admin-tabs { display: flex; gap: 4px; margin-bottom: 1.4rem; flex-wrap: wrap; }
+      .admin-tab {
+        font-family: "Oswald", sans-serif; font-size: 0.74rem; font-weight: 700;
+        letter-spacing: 1px; text-transform: uppercase; padding: 9px 16px;
+        background: var(--gray-2); border: 1px solid var(--line);
+        color: rgba(255,255,255,0.55); cursor: pointer; border-radius: 4px;
+      }
+      .admin-tab.active { background: var(--gold); color: var(--black); border-color: var(--gold); }
+      .admin-pane { display: none; }
+      .admin-pane.active { display: block; }
+
+      .card {
+        background: var(--off-white); color: var(--black);
+        border-radius: 6px; padding: 1.4rem; margin-bottom: 1.2rem;
+      }
+      .card h3 {
+        font-family: "Oswald", sans-serif; font-size: 1.1rem; font-weight: 800;
+        text-transform: uppercase; letter-spacing: 1px; margin-bottom: 1rem;
+      }
+      .field { margin-bottom: 1rem; }
+      .field label {
+        display: block; font-family: "Oswald", sans-serif; font-size: 0.72rem;
+        font-weight: 700; letter-spacing: 1px; text-transform: uppercase;
+        color: #555; margin-bottom: 0.35rem;
+      }
+      .field input, .field select {
+        width: 100%; padding: 9px 12px; border: 1.5px solid #d0cec7; border-radius: 3px;
+        font-family: "Rajdhani", sans-serif; font-size: 0.95rem; color: var(--black);
+        background: #fff; outline: none;
+      }
+      .field input:focus, .field select:focus { border-color: var(--gold-dark); }
+      .row-inline { display: flex; gap: 0.8rem; flex-wrap: wrap; align-items: flex-end; }
+      .row-inline .field { flex: 1; min-width: 120px; margin-bottom: 0; }
+
+      .list { list-style: none; }
+      .list li {
+        display: flex; align-items: center; justify-content: space-between; gap: 0.8rem;
+        padding: 0.6rem 0; border-bottom: 1px solid #e2dfd6;
+      }
+      .list li:last-child { border-bottom: none; }
+      .list .li-main { font-weight: 600; }
+      .list .li-sub { font-size: 0.82rem; color: #888; }
+
+      /* tabela de lançamento de pontos */
+      table.score-table { width: 100%; border-collapse: collapse; }
+      table.score-table th {
+        text-align: left; font-family: "Oswald", sans-serif; font-size: 0.7rem;
+        font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: #777;
+        padding: 0.4rem 0.5rem; border-bottom: 1px solid #d0cec7;
+      }
+      table.score-table td { padding: 0.4rem 0.5rem; border-bottom: 1px solid #e8e5dc; }
+      table.score-table input {
+        width: 110px; padding: 6px 8px; border: 1.5px solid #d0cec7; border-radius: 3px;
+        font-family: "Rajdhani", sans-serif; font-size: 0.95rem; text-align: right;
+      }
+      .score-actions { display: flex; gap: 0.7rem; flex-wrap: wrap; margin-top: 1.2rem; }
+      .btn-dark {
+        font-family: "Oswald", sans-serif; font-size: 0.82rem; font-weight: 800;
+        letter-spacing: 1px; text-transform: uppercase; cursor: pointer;
+        padding: 11px 20px; border-radius: 3px; border: 2px solid var(--black);
+        background: var(--black); color: var(--gold);
+      }
+      .btn-dark:hover { background: #222; }
+      .btn-dark.outline { background: transparent; color: var(--black); }
+      .hint { font-size: 0.82rem; color: #888; margin-top: 0.5rem; }
+
+      /* ============ MODAL LOGIN ============ */
+      .modal-bg {
+        display: none; position: fixed; inset: 0; z-index: 50;
+        background: rgba(0,0,0,0.8); align-items: center; justify-content: center; padding: 1.5rem;
+      }
+      .modal-bg.show { display: flex; }
+      .modal {
+        background: var(--off-white); color: var(--black); border-radius: 8px;
+        padding: 2rem; width: 100%; max-width: 380px;
+      }
+      .modal h2 {
+        font-family: "Oswald", sans-serif; font-size: 1.4rem; font-weight: 800;
+        text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.3rem;
+      }
+      .modal p.sub { font-size: 0.88rem; color: #777; margin-bottom: 1.4rem; }
+      .modal .err {
+        display: none; background: #fbe9e9; color: #b33; border: 1px solid #e3b5b5;
+        border-radius: 4px; padding: 0.6rem 0.8rem; font-size: 0.85rem; margin-bottom: 1rem;
+      }
+      .modal .err.show { display: block; }
+      .modal-actions { display: flex; gap: 0.7rem; margin-top: 1rem; }
+      .modal-actions .btn-dark, .modal-actions .btn { flex: 1; }
+
+      /* ============ SETUP (config faltando) ============ */
+      #setupScreen { display: none; max-width: 720px; margin: 4rem auto; padding: 0 1.5rem; }
+      #setupScreen.show { display: block; }
+      #setupScreen h2 {
+        font-family: "Oswald", sans-serif; font-size: 1.6rem; font-weight: 800;
+        text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.6rem; color: var(--gold);
+      }
+      #setupScreen ol { margin: 1rem 0 0 1.2rem; line-height: 1.7; }
+      #setupScreen code {
+        background: var(--gray); padding: 2px 6px; border-radius: 3px; color: var(--gold-light);
+        font-size: 0.9rem;
+      }
+
+      .toast {
+        position: fixed; bottom: 1.5rem; left: 50%; transform: translateX(-50%);
+        background: var(--black); color: var(--gold); border: 1px solid var(--gold);
+        padding: 0.7rem 1.3rem; border-radius: 4px; font-family: "Oswald", sans-serif;
+        font-size: 0.8rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase;
+        z-index: 60; opacity: 0; pointer-events: none; transition: opacity 0.25s;
+      }
+      .toast.show { opacity: 1; }
+
+      /* ============ RESPONSIVO ============ */
+      @media (max-width: 720px) {
+        .resumo { grid-template-columns: repeat(2, 1fr); }
+        .ph-brand h1 { font-size: 1.2rem; }
+      }
+      @media (max-width: 440px) {
+        .resumo { grid-template-columns: 1fr; }
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- ====================================================== -->
+    <!-- CONFIG: cole aqui os dados do seu projeto Supabase     -->
+    <!-- ====================================================== -->
+    <script>
+      const SUPABASE_URL = "https://fbcrtbzvrvlkcetresfi.supabase.co";
+      const SUPABASE_ANON_KEY = "sb_publishable_4rjT-UmRNt6cvoDOcC1eEQ_FCyVx5_K";
+
+      // Valor da inscrição (usado para calcular o pote do campeão)
+      const VALOR_INSCRICAO = 15;
+      // Valor que o lanterna paga ao primeiro de cada rodada
+      const VALOR_RODADA = 10;
+    </script>
+
+    <!-- ===================== SETUP ===================== -->
+    <div id="setupScreen">
+      <h2>Falta configurar o Supabase</h2>
+      <p style="color: rgba(255,255,255,0.6); line-height: 1.6">
+        Abra este arquivo num editor e preencha <code>SUPABASE_URL</code> e
+        <code>SUPABASE_ANON_KEY</code> lá no topo (procure por
+        <code>COLE_AQUI</code>). Os dois valores ficam em
+        <strong>Project Settings → API</strong> dentro do painel do Supabase.
+      </p>
+      <ol style="color: rgba(255,255,255,0.7)">
+        <li>Crie um projeto grátis em supabase.com</li>
+        <li>Rode o SQL das tabelas (te passei separadamente)</li>
+        <li>Crie seu usuário admin em Authentication → Users</li>
+        <li>Cole as duas chaves aqui e recarregue a página</li>
+      </ol>
+    </div>
+
+    <!-- ===================== APP ===================== -->
+    <div id="app" style="display: none">
+      <header class="painel-header">
+        <div class="ph-brand">
+          <img src="logo-white.png" alt="FIFA World Cup 2026" />
+          <div>
+            <div class="ph-eyebrow">Copa do Mundo 2026</div>
+            <h1>Cartola · Painel da Liga</h1>
+          </div>
+        </div>
+        <div class="auth-area" id="authArea">
+          <button class="btn ghost" id="btnLogin" onclick="openLogin()">Entrar (organizador)</button>
+        </div>
+      </header>
+
+      <main>
+        <!-- faixa de resumo -->
+        <div class="resumo" id="resumo"></div>
+
+        <!-- classificação geral -->
+        <section class="block">
+          <div class="block-label">Quem leva o pote</div>
+          <div class="block-title">Classificação geral</div>
+          <div class="tabela-wrap">
+            <table class="rank">
+              <thead>
+                <tr>
+                  <th class="pos">#</th>
+                  <th>Participante</th>
+                  <th class="num">Pontos</th>
+                  <th class="num">Rodadas</th>
+                  <th class="num">Saldo (R$)</th>
+                </tr>
+              </thead>
+              <tbody id="tabelaClassificacao"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- histórico de rodadas -->
+        <section class="block">
+          <div class="block-label">Rodada a rodada</div>
+          <div class="block-title">Histórico</div>
+          <div class="rodadas-grid" id="historicoRodadas"></div>
+        </section>
+
+        <!-- ============ PAINEL ADMIN ============ -->
+        <section id="adminPanel">
+          <div class="admin-banner">⚙️ Modo organizador — só você vê estes controles</div>
+
+          <div class="admin-tabs">
+            <button class="admin-tab active" onclick="goAdminTab(0)" id="atab0">Participantes</button>
+            <button class="admin-tab" onclick="goAdminTab(1)" id="atab1">Rodadas</button>
+            <button class="admin-tab" onclick="goAdminTab(2)" id="atab2">Lançar pontos</button>
+          </div>
+
+          <!-- Participantes -->
+          <div class="admin-pane active" id="apane0">
+            <div class="card">
+              <h3>Adicionar participante</h3>
+              <div class="row-inline">
+                <div class="field"><label>Nome</label><input id="pNome" placeholder="João da Silva" /></div>
+                <div class="field"><label>Nickname Cartola</label><input id="pNick" placeholder="@craquesilva" /></div>
+                <div class="field"><label>WhatsApp</label><input id="pWpp" placeholder="(85) 99999-9999" /></div>
+                <button class="btn-dark" onclick="addParticipante()">Adicionar</button>
+              </div>
+            </div>
+            <div class="card">
+              <h3>Participantes inscritos</h3>
+              <ul class="list" id="listParticipantes"></ul>
+            </div>
+          </div>
+
+          <!-- Rodadas -->
+          <div class="admin-pane" id="apane1">
+            <div class="card">
+              <h3>Criar rodada</h3>
+              <div class="row-inline">
+                <div class="field"><label>Nº da rodada</label><input id="rNum" type="number" placeholder="1" /></div>
+                <div class="field">
+                  <label>Fase</label>
+                  <select id="rFase">
+                    <option>Fase de Grupos</option>
+                    <option>Oitavas de final</option>
+                    <option>Quartas de final</option>
+                    <option>Semifinal</option>
+                    <option>Disputa de 3º lugar</option>
+                    <option>Final</option>
+                  </select>
+                </div>
+                <div class="field"><label>Data (opcional)</label><input id="rData" type="date" /></div>
+                <button class="btn-dark" onclick="addRodada()">Criar</button>
+              </div>
+            </div>
+            <div class="card">
+              <h3>Rodadas criadas</h3>
+              <ul class="list" id="listRodadas"></ul>
+            </div>
+          </div>
+
+          <!-- Lançar pontos -->
+          <div class="admin-pane" id="apane2">
+            <div class="card">
+              <h3>Lançar pontuações</h3>
+              <div class="field" style="max-width: 320px">
+                <label>Escolha a rodada</label>
+                <select id="selRodada" onchange="renderScoreInputs()"></select>
+              </div>
+              <div id="scoreArea"></div>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <!-- ===================== MODAL LOGIN ===================== -->
+    <div class="modal-bg" id="loginModal">
+      <div class="modal">
+        <h2>Acesso do organizador</h2>
+        <p class="sub">Só você consegue editar. Todo mundo só consulta.</p>
+        <div class="err" id="loginErr"></div>
+        <div class="field"><label>E-mail</label><input id="loginEmail" type="email" /></div>
+        <div class="field"><label>Senha</label><input id="loginPass" type="password" /></div>
+        <div class="modal-actions">
+          <button class="btn ghost" onclick="closeLogin()">Cancelar</button>
+          <button class="btn-dark" onclick="doLogin()">Entrar</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <!-- ===================== LÓGICA ===================== -->
+    <script>
+      let sb = null;
+      let isAdmin = false;
+
+      // cache de dados
+      let participantes = [];
+      let rodadas = [];
+      let pontuacoes = [];
+
+      /* ---------- inicialização ---------- */
+      function configurado() {
+        return SUPABASE_URL && SUPABASE_ANON_KEY &&
+          !SUPABASE_URL.includes("COLE_AQUI") && !SUPABASE_ANON_KEY.includes("COLE_AQUI");
+      }
+
+      async function init() {
+        if (!configurado()) {
+          document.getElementById("setupScreen").classList.add("show");
+          return;
+        }
+        document.getElementById("app").style.display = "block";
+        sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        // checa sessão existente
+        const { data: { session } } = await sb.auth.getSession();
+        setAdmin(!!session, session ? session.user.email : null);
+
+        sb.auth.onAuthStateChange((_event, session) => {
+          setAdmin(!!session, session ? session.user.email : null);
+        });
+
+        await carregarTudo();
+      }
+
+      /* ---------- carregar dados ---------- */
+      async function carregarTudo() {
+        const [p, r, pt] = await Promise.all([
+          sb.from("participantes").select("*").order("nome"),
+          sb.from("rodadas").select("*").order("numero"),
+          sb.from("pontuacoes").select("*"),
+        ]);
+        participantes = p.data || [];
+        rodadas = r.data || [];
+        pontuacoes = pt.data || [];
+        renderTudo();
+      }
+
+      /* ---------- cálculo ---------- */
+      function pontosDe(rodadaId, participanteId) {
+        const reg = pontuacoes.find(
+          (x) => x.rodada_id === rodadaId && x.participante_id === participanteId
+        );
+        return reg ? Number(reg.pontos) : null;
+      }
+
+      // resultado de uma rodada: vencedor, lanterna, empate?
+      function resultadoRodada(rodada) {
+        const linhas = pontuacoes
+          .filter((x) => x.rodada_id === rodada.id && x.pontos !== null)
+          .map((x) => ({ pid: x.participante_id, pts: Number(x.pontos) }));
+        if (linhas.length < 2) return null;
+
+        const max = Math.max(...linhas.map((l) => l.pts));
+        const min = Math.min(...linhas.map((l) => l.pts));
+        const topo = linhas.filter((l) => l.pts === max);
+        const fundo = linhas.filter((l) => l.pts === min);
+        const empate = topo.length > 1 || fundo.length > 1;
+
+        return {
+          vencedor: topo[0].pid,
+          lanterna: fundo[0].pid,
+          maxPts: max,
+          minPts: min,
+          empate,
+        };
+      }
+
+      // monta a classificação geral + saldos
+      function calcularClassificacao() {
+        const stats = {};
+        participantes.forEach((p) => {
+          stats[p.id] = { p, total: 0, jogadas: 0, vitorias: 0, derrotas: 0 };
+        });
+
+        // soma de pontos de todas as rodadas com lançamento
+        pontuacoes.forEach((x) => {
+          if (stats[x.participante_id] && x.pontos !== null) {
+            stats[x.participante_id].total += Number(x.pontos);
+            stats[x.participante_id].jogadas += 1;
+          }
+        });
+
+        // vitórias / derrotas só de rodadas encerradas e sem empate
+        rodadas
+          .filter((r) => r.status === "encerrada")
+          .forEach((r) => {
+            const res = resultadoRodada(r);
+            if (!res || res.empate) return;
+            if (stats[res.vencedor]) stats[res.vencedor].vitorias += 1;
+            if (stats[res.lanterna]) stats[res.lanterna].derrotas += 1;
+          });
+
+        const arr = Object.values(stats).map((s) => ({
+          ...s,
+          saldo: (s.vitorias - s.derrotas) * VALOR_RODADA,
+        }));
+        arr.sort((a, b) => b.total - a.total || a.p.nome.localeCompare(b.p.nome));
+        return arr;
+      }
+
+      /* ---------- render público ---------- */
+      function renderTudo() {
+        renderResumo();
+        renderClassificacao();
+        renderHistorico();
+        if (isAdmin) {
+          renderListaParticipantes();
+          renderListaRodadas();
+          renderSelectRodada();
+        }
+      }
+
+      function fmtBRL(v) {
+        return v.toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      }
+
+      function renderResumo() {
+        const encerradas = rodadas.filter((r) => r.status === "encerrada").length;
+        const ultimaRodada = rodadas[rodadas.length - 1];
+        const faseAtual = ultimaRodada ? ultimaRodada.fase : "—";
+        const pote = participantes.length * VALOR_INSCRICAO;
+        document.getElementById("resumo").innerHTML = `
+          <div class="stat"><div class="s-label">Fase atual</div><div class="s-value" style="font-size:1.5rem;line-height:1.1">${faseAtual}</div></div>
+          <div class="stat"><div class="s-label">Participantes</div><div class="s-value">${participantes.length}</div></div>
+          <div class="stat"><div class="s-label">Rodadas encerradas</div><div class="s-value">${encerradas}</div></div>
+          <div class="stat gold"><div class="s-label">Pote do campeão</div><div class="s-value">R$ ${fmtBRL(pote)}</div><div class="s-sub">R$ ${VALOR_INSCRICAO} × ${participantes.length}</div></div>
+        `;
+      }
+
+      function nomeDe(pid) {
+        const p = participantes.find((x) => x.id === pid);
+        return p ? p.nome : "—";
+      }
+
+      function renderClassificacao() {
+        const tbody = document.getElementById("tabelaClassificacao");
+        const rank = calcularClassificacao();
+        if (rank.length === 0) {
+          tbody.innerHTML = `<tr><td colspan="5"><div class="empty">Nenhum participante cadastrado ainda.</div></td></tr>`;
+          return;
+        }
+        tbody.innerHTML = rank
+          .map((s, i) => {
+            const saldoCls = s.saldo > 0 ? "saldo-pos" : s.saldo < 0 ? "saldo-neg" : "saldo-zero";
+            const saldoTxt = (s.saldo > 0 ? "+" : "") + "R$ " + fmtBRL(s.saldo);
+            const leader = i === 0 && s.total > 0 ? "leader" : "";
+            const crown = i === 0 && s.total > 0 ? '<span class="crown">👑</span>' : "";
+            return `
+              <tr class="${leader}">
+                <td class="pos">${i + 1}</td>
+                <td><span class="nome">${s.p.nome}</span>${crown}<br><span class="nick">${s.p.nickname || ""}</span></td>
+                <td class="num"><span class="pts">${fmtBRL(s.total)}</span></td>
+                <td class="num">${s.jogadas}</td>
+                <td class="num ${saldoCls}">${saldoTxt}</td>
+              </tr>`;
+          })
+          .join("");
+      }
+
+      function renderHistorico() {
+        const wrap = document.getElementById("historicoRodadas");
+        if (rodadas.length === 0) {
+          wrap.innerHTML = `<div class="empty">Nenhuma rodada criada ainda.</div>`;
+          return;
+        }
+        wrap.innerHTML = [...rodadas]
+          .reverse()
+          .map((r) => {
+            const res = resultadoRodada(r);
+            const statusCls = r.status === "encerrada" ? "encerrada" : "aberta";
+            let corpo;
+            if (r.status !== "encerrada") {
+              corpo = `<div class="rc-line"><span class="lbl">Status</span><span>Aguardando encerramento</span></div>`;
+            } else if (!res) {
+              corpo = `<div class="rc-line"><span class="lbl">Sem pontuações suficientes</span></div>`;
+            } else {
+              corpo = `
+                <div class="rc-line"><span class="lbl">1º lugar</span><span class="v-win">${nomeDe(res.vencedor)} · ${fmtBRL(res.maxPts)}</span></div>
+                <div class="rc-line"><span class="lbl">Lanterna</span><span class="v-lose">${nomeDe(res.lanterna)} · ${fmtBRL(res.minPts)}</span></div>
+                <div class="rc-line"><span class="lbl">Transferência</span><span>R$ ${VALOR_RODADA},00</span></div>
+                ${res.empate ? '<div class="rc-empate">⚠️ Empate no topo ou na lanterna — defina manualmente.</div>' : ""}
+              `;
+            }
+            return `
+              <div class="rodada-card ${statusCls}">
+                <div class="rc-top">
+                  <div><div class="rc-num">Rodada ${r.numero}</div><div class="rc-fase">${r.fase || ""}</div></div>
+                  <span class="rc-status ${statusCls}">${r.status}</span>
+                </div>
+                ${corpo}
+              </div>`;
+          })
+          .join("");
+      }
+
+      /* ---------- modo admin ---------- */
+      function setAdmin(on, email) {
+        isAdmin = on;
+        document.getElementById("adminPanel").style.display = on ? "block" : "none";
+        const area = document.getElementById("authArea");
+        if (on) {
+          area.innerHTML = `<span class="who">${email}</span><button class="btn ghost" onclick="doLogout()">Sair</button>`;
+          renderListaParticipantes();
+          renderListaRodadas();
+          renderSelectRodada();
+        } else {
+          area.innerHTML = `<button class="btn ghost" id="btnLogin" onclick="openLogin()">Entrar (organizador)</button>`;
+        }
+      }
+
+      function goAdminTab(n) {
+        document.querySelectorAll(".admin-pane").forEach((p, i) => p.classList.toggle("active", i === n));
+        document.querySelectorAll(".admin-tab").forEach((t, i) => t.classList.toggle("active", i === n));
+      }
+
+      /* ---------- login ---------- */
+      function openLogin() { document.getElementById("loginModal").classList.add("show"); }
+      function closeLogin() {
+        document.getElementById("loginModal").classList.remove("show");
+        document.getElementById("loginErr").classList.remove("show");
+      }
+      async function doLogin() {
+        const email = document.getElementById("loginEmail").value.trim();
+        const pass = document.getElementById("loginPass").value;
+        const { error } = await sb.auth.signInWithPassword({ email, password: pass });
+        if (error) {
+          const e = document.getElementById("loginErr");
+          e.textContent = "Não consegui entrar. Confira e-mail e senha.";
+          e.classList.add("show");
+          return;
+        }
+        closeLogin();
+        await carregarTudo();
+        toast("Bem-vindo, organizador!");
+      }
+      async function doLogout() {
+        await sb.auth.signOut();
+        toast("Você saiu do modo organizador.");
+        renderTudo();
+      }
+
+      /* ---------- CRUD participantes ---------- */
+      async function addParticipante() {
+        const nome = document.getElementById("pNome").value.trim();
+        const nickname = document.getElementById("pNick").value.trim();
+        const whatsapp = document.getElementById("pWpp").value.trim();
+        if (!nome) { toast("Informe pelo menos o nome."); return; }
+        const { error } = await sb.from("participantes").insert({ nome, nickname, whatsapp });
+        if (error) { toast("Erro ao salvar."); return; }
+        document.getElementById("pNome").value = "";
+        document.getElementById("pNick").value = "";
+        document.getElementById("pWpp").value = "";
+        await carregarTudo();
+        toast("Participante adicionado.");
+      }
+      async function delParticipante(id) {
+        if (!confirm("Remover este participante? As pontuações dele também saem.")) return;
+        await sb.from("participantes").delete().eq("id", id);
+        await carregarTudo();
+        toast("Participante removido.");
+      }
+      function renderListaParticipantes() {
+        const ul = document.getElementById("listParticipantes");
+        if (participantes.length === 0) { ul.innerHTML = `<li><span class="li-sub">Ninguém cadastrado ainda.</span></li>`; return; }
+        ul.innerHTML = participantes
+          .map((p) => `
+            <li>
+              <div><span class="li-main">${p.nome}</span><br><span class="li-sub">${p.nickname || "—"} · ${p.whatsapp || "—"}</span></div>
+              <button class="btn danger small" onclick="delParticipante('${p.id}')">Remover</button>
+            </li>`)
+          .join("");
+      }
+
+      /* ---------- CRUD rodadas ---------- */
+      async function addRodada() {
+        const numero = parseInt(document.getElementById("rNum").value, 10);
+        const fase = document.getElementById("rFase").value;
+        const dataVal = document.getElementById("rData").value || null;
+        if (!numero) { toast("Informe o número da rodada."); return; }
+        const { error } = await sb.from("rodadas").insert({ numero, fase, data: dataVal, status: "aberta" });
+        if (error) { toast("Erro ao criar rodada."); return; }
+        document.getElementById("rNum").value = "";
+        await carregarTudo();
+        toast("Rodada criada.");
+      }
+      async function delRodada(id) {
+        if (!confirm("Apagar esta rodada e suas pontuações?")) return;
+        await sb.from("rodadas").delete().eq("id", id);
+        await carregarTudo();
+        toast("Rodada apagada.");
+      }
+      async function toggleRodada(id, novoStatus) {
+        await sb.from("rodadas").update({ status: novoStatus }).eq("id", id);
+        await carregarTudo();
+        toast(novoStatus === "encerrada" ? "Rodada encerrada." : "Rodada reaberta.");
+      }
+      function renderListaRodadas() {
+        const ul = document.getElementById("listRodadas");
+        if (rodadas.length === 0) { ul.innerHTML = `<li><span class="li-sub">Nenhuma rodada criada.</span></li>`; return; }
+        ul.innerHTML = rodadas
+          .map((r) => {
+            const acao = r.status === "encerrada"
+              ? `<button class="btn ghost small" onclick="toggleRodada('${r.id}','aberta')">Reabrir</button>`
+              : `<button class="btn small" onclick="toggleRodada('${r.id}','encerrada')">Encerrar</button>`;
+            return `
+              <li>
+                <div><span class="li-main">Rodada ${r.numero}</span><br><span class="li-sub">${r.fase || "—"} · ${r.status}</span></div>
+                <div style="display:flex;gap:6px">${acao}<button class="btn danger small" onclick="delRodada('${r.id}')">Apagar</button></div>
+              </li>`;
+          })
+          .join("");
+      }
+
+      /* ---------- lançar pontos ---------- */
+      function renderSelectRodada() {
+        const sel = document.getElementById("selRodada");
+        if (rodadas.length === 0) { sel.innerHTML = `<option value="">Crie uma rodada primeiro</option>`; document.getElementById("scoreArea").innerHTML = ""; return; }
+        const atual = sel.value;
+        sel.innerHTML = rodadas
+          .map((r) => `<option value="${r.id}">Rodada ${r.numero} — ${r.fase || ""} (${r.status})</option>`)
+          .join("");
+        if (atual && rodadas.some((r) => r.id === atual)) sel.value = atual;
+        renderScoreInputs();
+      }
+
+      function renderScoreInputs() {
+        const rodadaId = document.getElementById("selRodada").value;
+        const area = document.getElementById("scoreArea");
+        if (!rodadaId) { area.innerHTML = ""; return; }
+        if (participantes.length === 0) { area.innerHTML = `<p class="hint">Cadastre participantes antes de lançar pontos.</p>`; return; }
+
+        const linhas = participantes
+          .map((p) => {
+            const val = pontosDe(rodadaId, p.id);
+            return `
+              <tr>
+                <td>${p.nome} <span class="li-sub">${p.nickname || ""}</span></td>
+                <td><input type="number" step="0.01" data-pid="${p.id}" value="${val === null ? "" : val}" placeholder="0,00" /></td>
+              </tr>`;
+          })
+          .join("");
+
+        area.innerHTML = `
+          <table class="score-table">
+            <thead><tr><th>Participante</th><th>Pontos</th></tr></thead>
+            <tbody>${linhas}</tbody>
+          </table>
+          <div class="score-actions">
+            <button class="btn-dark" onclick="salvarPontos()">Salvar pontuações</button>
+          </div>
+          <p class="hint">Salve as pontuações e depois encerre a rodada na aba "Rodadas" para registrar o pagamento.</p>
+        `;
+      }
+
+      async function salvarPontos() {
+        const rodadaId = document.getElementById("selRodada").value;
+        const inputs = document.querySelectorAll("#scoreArea input[data-pid]");
+        const linhas = [];
+        inputs.forEach((inp) => {
+          if (inp.value.trim() !== "") {
+            linhas.push({
+              rodada_id: rodadaId,
+              participante_id: inp.dataset.pid,
+              pontos: parseFloat(inp.value.replace(",", ".")),
+            });
+          }
+        });
+        if (linhas.length === 0) { toast("Preencha ao menos uma pontuação."); return; }
+        const { error } = await sb.from("pontuacoes").upsert(linhas, { onConflict: "rodada_id,participante_id" });
+        if (error) { toast("Erro ao salvar pontuações."); return; }
+        await carregarTudo();
+        toast("Pontuações salvas.");
+      }
+
+      /* ---------- toast ---------- */
+      let toastTimer;
+      function toast(msg) {
+        const t = document.getElementById("toast");
+        t.textContent = msg;
+        t.classList.add("show");
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => t.classList.remove("show"), 2600);
+      }
+
+      /* ---------- start ---------- */
+      init();
+    </script>
+  </body>
+</html>
